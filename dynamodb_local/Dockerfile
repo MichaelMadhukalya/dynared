@@ -1,12 +1,7 @@
-FROM alpine:3.19
+FROM eclipse-temurin:21-jdk
 
-RUN apk add --no-cache \
-    bash \
-    curl \
-    tar \
-    unzip \
-    gcompat \
-    libc6-compat
+RUN apt-get update && apt-get install -y curl unzip \
+ && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_VERSION=21.0.5
 
@@ -27,7 +22,7 @@ WORKDIR ${DYNAMODB_HOME}
 
 COPY . .
 
-RUN tar -xzvf ./dist/archive dynamodb_local_latest.tar.gz -C ./dist 
+RUN tar -xzf ${DYNAMODB_HOME}/dist/archive/dynamodb_local_latest.tar.gz -C ${DYNAMODB_HOME}/dist 
 
 EXPOSE 8000
 
