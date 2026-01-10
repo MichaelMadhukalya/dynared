@@ -54,6 +54,11 @@ RUN cat > /.aws/config <<'EOF'
 [default]
 region = us-east-1
 output = json
+
+[services dynamodb]
+region = us-east-1
+endpoint_url = http://localhost:8000
+output = json
 EOF
 
 RUN chmod 660 /.aws/credentials

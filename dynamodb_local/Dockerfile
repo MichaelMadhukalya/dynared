@@ -1,7 +1,10 @@
 FROM eclipse-temurin:21-jdk
 
-RUN apt-get update && apt-get install -y curl unzip \
- && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y && \
+        curl \
+        unzip \ 
+    && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_VERSION=21.0.5
 
