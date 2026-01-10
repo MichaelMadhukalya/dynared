@@ -1,12 +1,10 @@
-FROM alpine:3.19
+FROM eclipse-temurin:21-jdk
 
-RUN apk add --no-cache \
-    bash \
-    curl \
-    tar \
-    unzip \
-    gcompat \
-    libc6-compat
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        curl \
+        unzip \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_VERSION=21.0.5
 
@@ -21,4 +19,44 @@ RUN mkdir -p ${JAVA_HOME} && \
 
 ENV PATH=${JAVA_HOME}/bin:${PATH}
 
-CMD [ "/bin/sh" ]
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        python3 \
+        python3-venv \
+        python3-pip \
+        pipx \
+        ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
+ENV AWSCLI_HOME=/usr/lib/awscli
+
+RUN mkdir -p ${AWSCLI_HOME} && \
+    curl -L -o /tmp/awscliv2.zip "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" && \
+    unzip /tmp/awscliv2.zip && \
+    mv ./aws ${AWSCLI_HOME}/ && \
+    ${AWSCLI_HOME}/aws/install && \
+    rm -rf /tmp/awscliv2.zip
+
+RUN mkdir -p .aws
+
+RUN cat > /.aws/credentials <<'EOF'
+[default]
+aws_access_key_id = YOUR_ACCESS_KEY_ID
+aws_secret_access_key = YOUR_SECRET_ACCESS_KEY
+EOF
+
+RUN cat > /.aws/config <<'EOF'
+[default]
+region = us-east-1
+output = json
+EOF
+
+RUN chmod 660 /.aws/credentials
+RUN chmod 660 /.aws/config
+
+CMD [ "bash" ]

@@ -26,4 +26,4 @@ RUN tar -xzf ${DYNAMODB_HOME}/dist/archive/dynamodb_local_latest.tar.gz -C ${DYN
 
 EXPOSE 8000
 
-ENTRYPOINT java -Djava.library.path=${DYNAMODB_HOME}/dist/DynamoDBLocal_lib -jar ${DYNAMODB_HOME}/dist/DynamoDBLocal.jar -sharedDb
+ENTRYPOINT java -Djava.library.path=${DYNAMODB_HOME}/dist/DynamoDBLocal_lib -jar ${DYNAMODB_HOME}/dist/DynamoDBLocal.jar -sharedDb -dbPath ${DYNAMODB_HOME}/data
