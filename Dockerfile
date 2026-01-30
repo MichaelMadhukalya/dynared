@@ -30,7 +30,6 @@ RUN apt-get update && \
         ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 ENV AWSCLI_HOME=/usr/lib/awscli
@@ -63,5 +62,7 @@ EOF
 
 RUN chmod 660 /.aws/credentials
 RUN chmod 660 /.aws/config
+
+EXPOSE 8011
 
 CMD [ "bash" ]
